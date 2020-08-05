@@ -1,4 +1,4 @@
-if GetCurrentResourceName() == "td-holdcorner" then
+if GetCurrentResourceName() == "td_cornerhold" then
 SX = nil
 
 TriggerEvent('esx:getSharedObject', function(obj) 
@@ -104,7 +104,7 @@ function Sanitize(str)
 end
 else
         print("--------------------------------")
-        print("Scriptin ismi td-cornerhold olmali.")
+        print("Scriptin ismi td_cornerhold olmali.")
         print("https://discord.gg/sMHCzsh")
         print("--------------------------------")
         print("")

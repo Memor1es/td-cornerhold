@@ -196,7 +196,7 @@ function pedAra(playerPed)
 			rastgeleEsyaSec = math.random(1, #Config.bolge[bolgeAdi]["esyalar"]) 
 			rastgeleEsya = Config.bolge[bolgeAdi]["esyalar"][rastgeleEsyaSec]
 			rastgeleEsyaAdi = Config.EsyaAdlari[rastgeleEsya]
-			rastgeleEsyaFiyati = math.random(exports["td-holdcorner"]:KoseTut(rastgeleEsya).r1, exports["td-holdcorner"]:KoseTut(rastgeleEsya).r2)
+			rastgeleEsyaFiyati = math.random(exports["td_cornerhold"]:KoseTut(rastgeleEsya).r1, exports["td_cornerhold"]:KoseTut(rastgeleEsya).r2)
 			bolgeKordinat = playerCoords
 			satilanNpcler[rped] = false
 			npcBulundu = true
