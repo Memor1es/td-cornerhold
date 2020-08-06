@@ -9,7 +9,7 @@ end)
 
 local satilanNpcler = {}
 local rastgeleEsya, rastgeleEsyaAdi, rastgeleEsyaFiyati, miktar, npc, bolgeKordinat, bolgeAdi = nil, nil, nil, nil, nil, nil, nil
-local koseTut, npcBulundu, npcAra = false, false, false
+local koseTut, npcFound, npcSearch = false, false, false
 
 RegisterCommand("köşetut", function(source, args)
 	ESX.TriggerServerCallback('td-kosetut:polissayisi', function(cops)
@@ -22,8 +22,8 @@ RegisterCommand("köşetut", function(source, args)
 				end
 
 				koseTut = true
-				npcBulundu = false
-				npcAra = true
+				npcFound = false
+				npcSearch = true
 			elseif IsPedInAnyVehicle(playerPed) then
 				exports['mythic_notify']:DoHudText('inform', _U('invehicle'))
 			else
@@ -39,12 +39,12 @@ Citizen.CreateThread(function()
 	while true do
 		cd = 100
 		if koseTut then
-			if not npcBulundu and npcAra then
+			if not npcFound and npcSearch then
 				cd = 5000
 				local playerPed = PlayerPedId()
 				local playerCoords = GetEntityCoords(playerPed)
 
-				local bolgeBulundu = false
+				local npcFound = false
 				for kodadi, bolge in pairs(Config.bolge) do
 					local bolgeKordinat = bolge["kordinat"]
 					if #(bolgeKordinat - playerCoords) < 45 then
@@ -54,19 +54,19 @@ Citizen.CreateThread(function()
 					end
 				end
 
-				if bolgeBulundu then
+				if npcFound then
 					exports['mythic_notify']:DoHudText('inform', _U('devamming'))
 					Citizen.Wait(3000)
 					npc = pedAra(playerPed)
 				else
 					koseTut = false
-					npcAra = false
-					npcBulundu = false
+					npcSearch = false
+					npcFound = false
 					exports['mythic_notify']:DoHudText('inform', _U('error_place'))
 				end
 			end
 
-			if npcBulundu and not npcAra and not satilanNpcler[npc] then
+			if npcFound and not npcSearch and not satilanNpcler[npc] then
 				cd = 1
 				local playerPed = PlayerPedId()
 				local playerCoords = GetEntityCoords(playerPed)
@@ -128,8 +128,8 @@ Citizen.CreateThread(function()
 					end
 				else
 					exports['mythic_notify']:DoHudText('inform', _U('so_far_seller'))
-					npcBulundu = false
-					npcAra = false
+					npcFound = false
+					npcSearch = false
 					koseTut = false
 				end
 			end
@@ -141,7 +141,7 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(1500)
-		if npcBulundu and not IsPedInAnyVehicle(npc) then
+		if npcFound and not IsPedInAnyVehicle(npc) then
 			local playerPed = PlayerPedId()
 	        local playerPos = GetEntityCoords(playerPed)
 			TaskGoToCoordAnyMeans(npc, playerPos, 1.0, 0, 0, 786603, 0xbf800000)
@@ -199,8 +199,8 @@ function pedAra(playerPed)
 			rastgeleEsyaFiyati = math.random(exports["td-cornerhold"]:KoseTut(rastgeleEsya).r1, exports["td-cornerhold"]:KoseTut(rastgeleEsya).r2)
 			bolgeKordinat = playerCoords
 			satilanNpcler[rped] = false
-			npcBulundu = true
-			npcAra = false
+			npcFound = true
+			npcSearch = false
 			break
 		end
 		success, ped = FindNextPed(handle)
@@ -225,8 +225,8 @@ function tekrarNpcAra(listeEkle)
 	end
 	ClearPedTasks(playerPed)
 	Citizen.Wait(5000)
-	npcBulundu = false
-	npcAra = true
+	npcFound = false
+	npcSearch = true
 end
 
 function DrawText3D(x, y, z, text)
