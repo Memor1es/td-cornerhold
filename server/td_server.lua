@@ -1,5 +1,5 @@
-if GetCurrentResourceName() == "td_cornerhold" then
-SX = nil
+if GetCurrentResourceName() == "td-cornerhold" then
+ESX = nil
 
 TriggerEvent('esx:getSharedObject', function(obj) 
     ESX = obj 
