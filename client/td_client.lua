@@ -8,8 +8,8 @@ Citizen.CreateThread(function()
 end)  
 
 local satilanNpcler = {}
-local rastgeleEsya, randomItemName, rastgeleEsyaFiyati, miktar, npc, bolgeKordinat, bolgeAdi = nil, nil, nil, nil, nil, nil, nil
-local koseTut, npcFound, npcSearch = false, false, false
+local rastgeleEsya, rastgeleEsyaAdi, rastgeleEsyaFiyati, miktar, npc, bolgeKordinat, bolgeAdi = nil, nil, nil, nil, nil, nil, nil
+local koseTut, npcBulundu, npcAra = false, false, false
 
 RegisterCommand("köşetut", function(source, args)
 	ESX.TriggerServerCallback('td-kosetut:polissayisi', function(cops)
@@ -22,8 +22,8 @@ RegisterCommand("köşetut", function(source, args)
 				end
 
 				koseTut = true
-				npcFound = false
-				npcSearch = true
+				npcBulundu = false
+				npcAra = true
 			elseif IsPedInAnyVehicle(playerPed) then
 				exports['mythic_notify']:DoHudText('inform', _U('invehicle'))
 			else
@@ -39,12 +39,12 @@ Citizen.CreateThread(function()
 	while true do
 		cd = 100
 		if koseTut then
-			if not npcFound and npcSearch then
+			if not npcBulundu and npcAra then
 				cd = 5000
 				local playerPed = PlayerPedId()
 				local playerCoords = GetEntityCoords(playerPed)
 
-				local npcFound = false
+				local bolgeBulundu = false
 				for kodadi, bolge in pairs(Config.bolge) do
 					local bolgeKordinat = bolge["kordinat"]
 					if #(bolgeKordinat - playerCoords) < 45 then
@@ -54,19 +54,19 @@ Citizen.CreateThread(function()
 					end
 				end
 
-				if npcFound then
+				if bolgeBulundu then
 					exports['mythic_notify']:DoHudText('inform', _U('devamming'))
 					Citizen.Wait(3000)
 					npc = pedAra(playerPed)
 				else
 					koseTut = false
-					npcSearch = false
-					npcFound = false
+					npcAra = false
+					npcBulundu = false
 					exports['mythic_notify']:DoHudText('inform', _U('error_place'))
 				end
 			end
 
-			if npcFound and not npcSearch and not satilanNpcler[npc] then
+			if npcBulundu and not npcAra and not satilanNpcler[npc] then
 				cd = 1
 				local playerPed = PlayerPedId()
 				local playerCoords = GetEntityCoords(playerPed)
@@ -80,7 +80,7 @@ Citizen.CreateThread(function()
 							npcAraci = GetVehiclePedIsIn(npc, false)
 						end
 
-						DrawText3D(npcCoords.x, npcCoords.y, npcCoords.z+1.05, "~g~[E] ~w~" .. miktar ..  " Adet " .. randomItemName .." Sat / ".. rastgeleEsyaFiyati*miktar .."$ ~g~[H] ~w~Kov", 0.45)
+						DrawText3D(npcCoords.x, npcCoords.y, npcCoords.z+1.05, "~g~[E] ~w~" .. miktar ..  " Adet " .. rastgeleEsyaAdi .." Sat / ".. rastgeleEsyaFiyati*miktar .."$ ~g~[H] ~w~Kov", 0.45)
 						
 						if HasEntityBeenDamagedByAnyPed(npc) then
 							exports['mythic_notify']:DoHudText('inform', _U('injured_buyer'))
@@ -128,8 +128,8 @@ Citizen.CreateThread(function()
 					end
 				else
 					exports['mythic_notify']:DoHudText('inform', _U('so_far_seller'))
-					npcFound = false
-					npcSearch = false
+					npcBulundu = false
+					npcAra = false
 					koseTut = false
 				end
 			end
@@ -141,7 +141,7 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(1500)
-		if npcFound and not IsPedInAnyVehicle(npc) then
+		if npcBulundu and not IsPedInAnyVehicle(npc) then
 			local playerPed = PlayerPedId()
 	        local playerPos = GetEntityCoords(playerPed)
 			TaskGoToCoordAnyMeans(npc, playerPos, 1.0, 0, 0, 786603, 0xbf800000)
@@ -195,12 +195,12 @@ function pedAra(playerPed)
 
 			rastgeleEsyaSec = math.random(1, #Config.bolge[bolgeAdi]["esyalar"]) 
 			rastgeleEsya = Config.bolge[bolgeAdi]["esyalar"][rastgeleEsyaSec]
-			randomItemName = Config.EsyaAdlari[rastgeleEsya]
+			rastgeleEsyaAdi = Config.EsyaAdlari[rastgeleEsya]
 			rastgeleEsyaFiyati = math.random(exports["td-cornerhold"]:KoseTut(rastgeleEsya).r1, exports["td-cornerhold"]:KoseTut(rastgeleEsya).r2)
 			bolgeKordinat = playerCoords
 			satilanNpcler[rped] = false
-			npcFound = true
-			npcSearch = false
+			npcBulundu = true
+			npcAra = false
 			break
 		end
 		success, ped = FindNextPed(handle)
@@ -225,8 +225,8 @@ function tekrarNpcAra(listeEkle)
 	end
 	ClearPedTasks(playerPed)
 	Citizen.Wait(5000)
-	npcFound = false
-	npcSearch = true
+	npcBulundu = false
+	npcAra = true
 end
 
 function DrawText3D(x, y, z, text)
