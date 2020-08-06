@@ -5,7 +5,7 @@ Config.PoliceCount = 0
 
 Config.Locale = 'tr'
 
-Config.webhook = 'https://discordapp.com/api/webhooks/736920219162771496/3wJBFU-GXiIRFozaVX6TLTurrwN2tuclNC1N0NSIAZgXjsEZ_szIZAawAWA5RT9poZCd'
+Config.webhook = 'DISCORD_WEBHOOK_HERE'
 
 Config.bolge = {
     ["Uyusturucu Köşesi-1"] = {
