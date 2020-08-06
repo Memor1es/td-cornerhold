@@ -1,6 +1,12 @@
 fx_version 'bodacious'
+
 game 'gta5'
 
+description 'td-holdcorner' 
+
+author 'Baris#3333&mblater^^#3333 - teamDemo'
+
+version '1.0.0'
 
 -- Client Scripts
 client_scripts {
