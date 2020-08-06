@@ -8,7 +8,7 @@ Citizen.CreateThread(function()
 end)  
 
 local satilanNpcler = {}
-local rastgeleEsya, rastgeleEsyaAdi, rastgeleEsyaFiyati, miktar, npc, bolgeKordinat, bolgeAdi = nil, nil, nil, nil, nil, nil, nil
+local rastgeleEsya, randomItemName, rastgeleEsyaFiyati, miktar, npc, bolgeKordinat, bolgeAdi = nil, nil, nil, nil, nil, nil, nil
 local koseTut, npcFound, npcSearch = false, false, false
 
 RegisterCommand("köşetut", function(source, args)
@@ -80,7 +80,7 @@ Citizen.CreateThread(function()
 							npcAraci = GetVehiclePedIsIn(npc, false)
 						end
 
-						DrawText3D(npcCoords.x, npcCoords.y, npcCoords.z+1.05, "~g~[E] ~w~" .. miktar ..  " Adet " .. rastgeleEsyaAdi .." Sat / ".. rastgeleEsyaFiyati*miktar .."$ ~g~[H] ~w~Kov", 0.45)
+						DrawText3D(npcCoords.x, npcCoords.y, npcCoords.z+1.05, "~g~[E] ~w~" .. miktar ..  " Adet " .. randomItemName .." Sat / ".. rastgeleEsyaFiyati*miktar .."$ ~g~[H] ~w~Kov", 0.45)
 						
 						if HasEntityBeenDamagedByAnyPed(npc) then
 							exports['mythic_notify']:DoHudText('inform', _U('injured_buyer'))
@@ -195,7 +195,7 @@ function pedAra(playerPed)
 
 			rastgeleEsyaSec = math.random(1, #Config.bolge[bolgeAdi]["esyalar"]) 
 			rastgeleEsya = Config.bolge[bolgeAdi]["esyalar"][rastgeleEsyaSec]
-			rastgeleEsyaAdi = Config.EsyaAdlari[rastgeleEsya]
+			randomItemName = Config.EsyaAdlari[rastgeleEsya]
 			rastgeleEsyaFiyati = math.random(exports["td-cornerhold"]:KoseTut(rastgeleEsya).r1, exports["td-cornerhold"]:KoseTut(rastgeleEsya).r2)
 			bolgeKordinat = playerCoords
 			satilanNpcler[rped] = false
