@@ -104,7 +104,7 @@ function Sanitize(str)
 end
 else
         print("--------------------------------")
-        print("Scriptin ismi td_cornerhold olmali.")
+        print("Scriptin ismi td-cornerhold olmali.")
         print("https://discord.gg/sMHCzsh")
         print("--------------------------------")
         print("")
